@@ -1,18 +1,24 @@
 /* eslint-disable no-use-before-define */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Input, Message, Button } from 'semantic-ui-react';
+import PropTypes  from 'prop-types';
+import { 
+    Input, 
+    Message, 
+    Button, 
+    Label, 
+    Icon 
+} from 'semantic-ui-react';
 
 export class Dialpad extends Component {
-    static proptTypes = {
-        sdk: PropTypes.object.isRequired,
+    static propTypes = {
+        sdk: PropTypes.object,
         regisStatus: PropTypes.string,
-        fields: PropTypes.object.isRequired,
+        account: PropTypes.object.isRequired,
         onSubmit: PropTypes.func.isRequired
     };
 
     state =  {
-        fields: {
+        fields: this.props.account || {
             username: '',
             password: '',
             domain: '',
@@ -22,7 +28,11 @@ export class Dialpad extends Component {
     }
 
     onSubmit = evt => {
-        // hook register()
+        const account = this.state.fields
+        const sdk = this.props.sdk
+        evt.preventDefault();
+        if(this.validate()) return;
+        this.props.onSubmit(account)
     }
 
     onInputChange = (evt) => {
@@ -41,12 +51,13 @@ export class Dialpad extends Component {
     render() {
 
         let status = this.props.regisStatus;
-        if(status === 'UNREGISTER') status = 'UNREGISTER';
+        if(status === 'UNCONNECT') status = 'UNCONNECT';
 
         return (
             <div>
                 <p>OnCall Login Settings</p>
                 <form onSubmit={this.onSubmit}>
+                    <div>
                     <Input
                         error={this.validate()?true:false}
                         type='text'
@@ -56,27 +67,37 @@ export class Dialpad extends Component {
                         onChange={this.onInputChange}
                     />
                     <span type={{color: 'red'}}>{this.state.fieldErrors.username}</span>
+                    </div>
                     <br/>
+                    <div>
                     <Input
                         error={this.validate()?true:false}
-                        type='text'
+                        type='password'
                         placeholder='Password'
                         name='password'
                         value={this.state.fields.password}
                         onChange={this.onInputChange}
                     />
                     <span type={{color: 'red'}}>{this.state.fieldErrors.password}</span>
+                    </div>
                     <br/>
+                    <div>
                     <Input 
                         error={this.validate()?true:false}
                         type='text'
+                        list='domains'
                         placeholder='Domain'
                         name='domain'
                         value={this.state.fields.domain}
                         onChange={this.onInputChange}
                     />
+                    <datalist id='domains'>
+                        <option value='sdc.dev'></option>
+                    </datalist>
                     <span type={{color: 'red'}}>{this.state.fieldErrors.domain}</span>
+                    </div>
                     <br/>
+                    <div>
                     <Input
                         error={this.validate()?true:false}
                         type='text'
@@ -86,7 +107,8 @@ export class Dialpad extends Component {
                         onChange={this.onInputChange}
                     />
                     <span type={{color: 'red'}}>{this.state.fieldErrors.url}</span>
-                </form>
+                    </div>
+                
                 <br/>
                 <Button type="submit"  disabled={this.validate()}>REGISTER</Button>
                 
@@ -115,7 +137,13 @@ export class Dialpad extends Component {
                             </Message>)
                     }[status]
                 }
-
+                </form>
+                <br/>
+                <div>
+                    <Label>
+                        <Icon name='mail'/><span type={{color: 'blue'}}>{this.props.regisStatus}</span>
+                    </Label>
+                </div>
             </div>
         )
     }

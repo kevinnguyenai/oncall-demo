@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { createStore } from "redux";
-import rotateReducer from "reducers/rotateReducer";
+import { DialpadReducer } from "./reducers/DialpadReducer";
 function configureStore(
 
     state = { 
@@ -14,6 +14,11 @@ function configureStore(
     }
     
     ) {
-  return createStore(rotateReducer,state);
+        
+  return createStore(
+      DialpadReducer,
+      state,
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
 }
 export default configureStore;

@@ -2,35 +2,52 @@
 import {
     REGISTERING,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    INIT_SDK,
+    INIT_SDK_SUCCESS,
+    INIT_SDK_FAIL
 } from '../actions/DialpadAction';
-import ONCALLSDK from '../utils/oncall-adapter'
 
 const initialstate = {
-    sdk: ONCALLSDK.init(),
-    regisStatus: "REGISTER_FAIL",
+    sdk: null,
+    regisStatus: "UNCONNECT",
+    initStatus: "UNINIT",
     account: {
-        username: '',
-        password: '',
-        domain: '',
-        url: ''
+        username: '104',
+        password: '104Abc123',
+        domain: 'sdc.dev',
+        url: 'wss://118.69.192.86:5065'
     }
 }
+
 
 export function DialpadReducer (state = initialstate, action) {
     switch (action.type) {
         case  REGISTERING:
             return Object.assign({}, state, {
-                regisStatus: 'REGISTERING'
+                regisStatus: 'CONNECTING'
             });
         case REGISTER_SUCCESS:
             return Object.assign({}, state, {
-                regisStatus: "REGISTED"
+                regisStatus: "CONNECTED"
             });
         case REGISTER_FAIL:
             return Object.assign({}, state, {
-                regisStatus: "UNREGISTERD"
+                regisStatus: "UNCONNECT"
             });
+        case INIT_SDK:
+            return Object.assign({}, state, {
+                initStatus: "UNINIT"
+            });
+        case INIT_SDK_SUCCESS:
+            return Object.assign({}, state, {
+                initStatus: "INIT SDK SUCCESSFUL",
+                sdk: action.sdk
+            });
+        case INIT_SDK_FAIL:
+            return Object.assign({}, state, {
+                initStatus: "INIT SDK FAIL"
+            })
         default: return state;
     }
 }
