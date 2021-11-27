@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import React from 'react';
 import thunkMiddleware from 'redux-thunk';
 import {connect, Provider} from 'react-redux';

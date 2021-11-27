@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import { createStore } from "redux";
 import rotateReducer from "reducers/rotateReducer";
 function configureStore(

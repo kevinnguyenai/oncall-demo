@@ -1,14 +1,15 @@
+/* eslint-disable no-use-before-define */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Message, Button } from 'semantic-ui-react';
 
 export class Dialpad extends Component {
     static proptTypes = {
-        sdk: PropTypes.object,
+        sdk: PropTypes.object.isRequired,
         regisStatus: PropTypes.string,
-        fields: PropTypes.object,
+        fields: PropTypes.object.isRequired,
         onSubmit: PropTypes.func.isRequired
-    }
+    };
 
     state =  {
         fields: {
@@ -21,6 +22,7 @@ export class Dialpad extends Component {
     }
 
     onSubmit = evt => {
+        // hook register()
     }
 
     onInputChange = (evt) => {
@@ -37,7 +39,10 @@ export class Dialpad extends Component {
 
 
     render() {
+
         let status = this.props.regisStatus;
+        if(status === 'UNREGISTER') status = 'UNREGISTER';
+
         return (
             <div>
                 <p>OnCall Login Settings</p>

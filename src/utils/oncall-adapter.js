@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import SDK from '../lib/sdk/portsip-web-sdk';
 
 export const ONCALLSDK = {
