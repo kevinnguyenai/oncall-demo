@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 //import App from './App';
-import Dialpad from './Page/Components/Dialpad/index';
+import DialpadItem from './Page/Components/Dialpad/index';
 //import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-less/semantic.less';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Dialpad />
+    <DialpadItem />
   </React.StrictMode>,
   document.getElementById('root')
 );
