@@ -3,18 +3,21 @@ import React, { Component } from 'react';
 import PropTypes  from 'prop-types';
 import { 
     Input, 
-    Message, 
     Button, 
     Label, 
     Icon 
 } from 'semantic-ui-react';
 
-export class Dialpad extends Component {
+export class DialpadRegister extends Component {
     static propTypes = {
         sdk: PropTypes.object,
+        error: PropTypes.string,
+        regisErrors: PropTypes.object,
         regisStatus: PropTypes.string,
+        rstatus: PropTypes.string.isRequired,
         account: PropTypes.object.isRequired,
-        onSubmit: PropTypes.func.isRequired
+        onSubmit: PropTypes.func.isRequired,
+        onInputUpdate: PropTypes.func.isRequired
     };
 
     state =  {
@@ -32,7 +35,7 @@ export class Dialpad extends Component {
         const sdk = this.props.sdk
         evt.preventDefault();
         if(this.validate()) return;
-        this.props.onSubmit(account)
+        this.props.onSubmit(account, this.props.rstatus);
     }
 
     onInputChange = (evt) => {
@@ -41,6 +44,7 @@ export class Dialpad extends Component {
         this.setState({
             fields: fields
         })
+        this.props.onInputUpdate();
     }
 
     validate = () => {
@@ -51,7 +55,6 @@ export class Dialpad extends Component {
     render() {
 
         let status = this.props.regisStatus;
-        if(status === 'UNCONNECT') status = 'UNCONNECT';
 
         return (
             <div>
@@ -66,7 +69,7 @@ export class Dialpad extends Component {
                         value={this.state.fields.username}
                         onChange={this.onInputChange}
                     />
-                    <span type={{color: 'red'}}>{this.state.fieldErrors.username}</span>
+                    <span style={{color: 'red'}}>{this.props.regisErrors.username}</span>
                     </div>
                     <br/>
                     <div>
@@ -78,7 +81,7 @@ export class Dialpad extends Component {
                         value={this.state.fields.password}
                         onChange={this.onInputChange}
                     />
-                    <span type={{color: 'red'}}>{this.state.fieldErrors.password}</span>
+                    <span style={{color: 'red'}}>{this.props.regisErrors.password}</span>
                     </div>
                     <br/>
                     <div>
@@ -94,7 +97,7 @@ export class Dialpad extends Component {
                     <datalist id='domains'>
                         <option value='sdc.dev'></option>
                     </datalist>
-                    <span type={{color: 'red'}}>{this.state.fieldErrors.domain}</span>
+                    <span style={{color: 'red'}}>{this.state.fieldErrors.domain}</span>
                     </div>
                     <br/>
                     <div>
@@ -106,47 +109,41 @@ export class Dialpad extends Component {
                         value={this.state.fields.url}
                         onChange={this.onInputChange}
                     />
-                    <span type={{color: 'red'}}>{this.state.fieldErrors.url}</span>
+                    <span style={{color: 'red'}}>{this.state.fieldErrors.url}</span>
                     </div>
                 
                 <br/>
-                <Button type="submit"  disabled={this.validate()}>REGISTER</Button>
+                <Button type="submit"  disabled={this.validate()}>{this.props.rstatus}</Button>
                 
                 {
                     {
                         CONNECTED: (
-                            <Message>
-                                <Message.Header>Connection Status</Message.Header>
-                                <p>
-                                    CONNECTED 
-                                </p>
-                            </Message>),
+                            <Label>
+                                <Icon name='phone' color='green'/><span >{this.props.regisStatus}</span>
+                            </Label>
+                            ),
                         CONNECTING: (
-                            <Message>
-                                <Message.Header>Connection Status</Message.Header>
-                                <p>
-                                    CONNECTING
-                                </p>
-                            </Message>),
-                        DISCONNECTED: (
-                            <Message>
-                                <Message.Header>Connection Status</Message.Header>
-                                <p>
-                                    UNCONNECTED
-                                </p>
-                            </Message>)
+                            <Label>
+                                <Icon name='phone' color='yellow'/><span >{this.props.regisStatus}</span>
+                            </Label>
+                            ),
+                        UNCONNECTING: (
+                            <Label>
+                                <Icon name='phone' color='yellow'/><span >{this.props.regisStatus}</span>
+                            </Label>                            
+                        ),
+                        UNCONNECT: (
+                            <Label>
+                                <Icon name='phone' color='red'/><span >{this.props.regisStatus}</span>
+                            </Label>
+                            )
                     }[status]
                 }
                 </form>
                 <br/>
-                <div>
-                    <Label>
-                        <Icon name='mail'/><span type={{color: 'blue'}}>{this.props.regisStatus}</span>
-                    </Label>
-                </div>
             </div>
         )
     }
 }
 
-export default Dialpad
+export default DialpadRegister
